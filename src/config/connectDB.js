@@ -1,10 +1,10 @@
 import mysql from "mysql2/promise";
 
 const connection = mysql.createPool({
-  host: 'database-2.c1yu4u8uoxrf.ap-southeast-2.rds.amazonaws.com',
-  user: 'admin',
-  password: '8600988002',
-  database: 'real91',
+  host: '77.37.35.23',
+  user: 'u416597400_guser',
+  password: 'AdminR@123#',
+  database: 'u416597400_game',
 });
 
 export default connection;
