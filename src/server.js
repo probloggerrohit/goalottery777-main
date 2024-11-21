@@ -1,19 +1,18 @@
-import "dotenv/config";
+import 'dotenv/config'
 
-import express from "express";
-import configViewEngine from "./config/configEngine.js";
-import routes from "./routes/web.js";
-import cronJobController from "./controllers/cronJobController.js";
-import socketIoController from "./controllers/socketIoController.js";
-import cookieParser from "cookie-parser";
-import http from "http";
-import { Server } from "socket.io";
+import express from 'express';
+import configViewEngine from './config/configEngine';
+import routes from './routes/web';
+import cronJobContronler from './controllers/cronJobContronler';
+import socketIoController from './controllers/socketIoController';
+
+let cookieParser = require('cookie-parser');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
-const port = process.env.PORT || 3040;
+const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
 // app.use(express.static('public'));
@@ -25,16 +24,17 @@ configViewEngine(app);
 // init Web Routes
 routes.initWebRouter(app);
 
-// Cron game 1 Phut
-cronJobController.cronJobGame1p(io);
+// Cron game 1 Phut 
+cronJobContronler.cronJobGame1p(io);
 
-// Check xem ai connect vào sever
+// Check xem ai connect vào sever 
 socketIoController.sendMessageAdmin(io);
 
 // app.all('*', (req, res) => {
-//     return res.render("404.ejs");
+//     return res.render("404.ejs"); 
 // });
 
 server.listen(port, () => {
-  console.log(`Connected success http://localhost:${port}`);
+    console.log("Connected success port: " + port);
 });
+
