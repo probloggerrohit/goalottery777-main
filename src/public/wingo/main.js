@@ -137,6 +137,16 @@ function countDownTimer({ GAME_TYPE_ID }) {
   }, 0);
 }
 countDownInterval4 = setInterval(function () {
+  const getTimeMSS = (countDownDate) => {
+    var now = new Date().getTime();
+    var distance = countDownDate - now;
+    var minutes = Math.floor((distance % (1000 * 60 * 30)) / (1000 * 60));
+    var minute = Math.ceil(minutes % parseInt(GAME_TYPE_ID));
+    var seconds1 = Math.floor((distance % (1000 * 60)) / 10000);
+    var seconds2 = Math.floor(((distance % (1000 * 60)) / 1000) % 10);
+
+    return { minute, seconds1, seconds2 };
+  };
     const { minute, seconds1, seconds2 } = getTimeMSS(countDownDate);
     if (GAME_TYPE_ID !== "1") {
       $(".TimeLeft__C-time div:eq(1)").text(seconds);
