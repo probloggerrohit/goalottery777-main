@@ -7760,6 +7760,123 @@
             color: rgb(150, 150, 150);
             font-weight: bold;
         }
+        .reacharge-popup.actie{
+            display:flex !important;
+        }
+        .reacharge-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            }
+
+            /* Inner popup content */
+            .reacharge-popup .popup-inn {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            }
+
+            /* Heading style */
+            .reacharge-popup .popup-inn h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+            }
+
+            /* QR image styling */
+            .reacharge-popup .qr-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            }
+
+            /* QR data styling */
+            .reacharge-popup .qr-data p {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 15px;
+            }
+
+            /* Input field styling */
+            .reacharge-popup .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            }
+
+            .reacharge-popup .form-group .utr {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            outline: none;
+            transition: border 0.3s ease;
+            }
+
+            .reacharge-popup .form-group .utr:focus {
+            border-color: #007bff;
+            }
+
+            /* Submit button styling */
+            .reacharge-popup .form-group .submmit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            }
+
+            .reacharge-popup .form-group .submmit:hover {
+            background-color: #0056b3;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 480px) {
+            .reacharge-popup .popup-inn {
+                padding: 15px;
+            }
+
+            .reacharge-popup .popup-inn h2 {
+                font-size: 1.2em;
+            }
+
+            .reacharge-popup .qr-data p {
+                font-size: 0.8em;
+            }
+
+            .reacharge-popup .form-group .utr,
+            .reacharge-popup .form-group .submmit {
+                font-size: 0.9em;
+            }
+            }
+            button.cancel.btn-danger {
+                background-color: #F44336;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 1em;
+                transition: background-color 0.3s ease;
+                margin-top: 10px;
+            }
     </style>
 </head>
 
@@ -7816,11 +7933,11 @@
                                 class="img">
                             <div data-v-67caa467="" class="name">UPI</div>
                         </div>
-                        <div id="usdtItem" data-v-67caa467="" class="item" type="usdt">
+                        <!-- <div id="usdtItem" data-v-67caa467="" class="item" type="usdt">
                             <img data-v-67caa467="" width="20px" height="20px" src="/images/recharge_TRANSFER_red.webp"
                                 class="img">
                             <div data-v-67caa467="" class="name">USDT</div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                
@@ -7895,6 +8012,22 @@
                     </div>
                 </div>
             </div>
+            <div class="reacharge-popup">
+                <div class="popup-inn">
+                  <h2>One Qr code for single payment only</h2>
+                    <div class="qr-image">
+                        <img src="https://i.postimg.cc/vHftv9sV/qr.jpg">
+                    </div>
+                    <div class="qr-data">
+                        <p>Pay on the above qr code and paste the UTR number from transaction below.</p>
+                        <div class="form-group">
+                            <input type="number" class="utr form-control" placeholder="Enter type number">
+                            <button class="submmit" id="create-bank">Submit</button>
+                            <button class="cancel btn-danger">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -7951,52 +8084,52 @@
         });
     });
 
-    usdtItem.addEventListener('click', function() {
-        toggleSelectedItem(usdtItem);
-        document.getElementById("inr_input").textContent = "$";
-        document.getElementById("amountInput").value = "4";
-        document.getElementById("inr").textContent = "In $";
-        const listContainer = document.getElementById('listContainer');
-        const listItems = listContainer.querySelectorAll('.li');
+    // usdtItem.addEventListener('click', function() {
+    //     toggleSelectedItem(usdtItem);
+    //     document.getElementById("inr_input").textContent = "$";
+    //     document.getElementById("amountInput").value = "4";
+    //     document.getElementById("inr").textContent = "In $";
+    //     const listContainer = document.getElementById('listContainer');
+    //     const listItems = listContainer.querySelectorAll('.li');
 
-        // Loop through each list item and update its content
-        listItems.forEach(item => {
-            const dataMoney = item.getAttribute('data-money');
-            const spanElement = item.querySelector('.number');
+    //     // Loop through each list item and update its content
+    //     listItems.forEach(item => {
+    //         const dataMoney = item.getAttribute('data-money');
+    //         const spanElement = item.querySelector('.number');
 
-            // Update the content based on the data-money attribute
-            switch (dataMoney) {
-                case "300":
-                    item.setAttribute('data-money', '4');
-                    spanElement.textContent = "4$";
-                    break;
-                case "500":
-                    item.setAttribute('data-money', '8');
-                    spanElement.textContent = "8$";
-                    break;
-                case "1000":
-                    item.setAttribute('data-money', '50');
-                    spanElement.textContent = "50$";
-                    break;
-                case "10000":
-                    item.setAttribute('data-money', '85');
-                    spanElement.textContent = "85$";
-                    break;
-                case "100000":
-                    item.setAttribute('data-money', '100');
-                    spanElement.textContent = "100$";
-                    break;
-                case "1000000":
-                    item.setAttribute('data-money', '1000');
-                    spanElement.textContent = "1000$";
-                    break;
-                default:
-                    // Do nothing for other cases
-                    break;
-            }
-        });
+    //         // Update the content based on the data-money attribute
+    //         switch (dataMoney) {
+    //             case "300":
+    //                 item.setAttribute('data-money', '4');
+    //                 spanElement.textContent = "4$";
+    //                 break;
+    //             case "500":
+    //                 item.setAttribute('data-money', '8');
+    //                 spanElement.textContent = "8$";
+    //                 break;
+    //             case "1000":
+    //                 item.setAttribute('data-money', '50');
+    //                 spanElement.textContent = "50$";
+    //                 break;
+    //             case "10000":
+    //                 item.setAttribute('data-money', '85');
+    //                 spanElement.textContent = "85$";
+    //                 break;
+    //             case "100000":
+    //                 item.setAttribute('data-money', '100');
+    //                 spanElement.textContent = "100$";
+    //                 break;
+    //             case "1000000":
+    //                 item.setAttribute('data-money', '1000');
+    //                 spanElement.textContent = "1000$";
+    //                 break;
+    //             default:
+    //                 // Do nothing for other cases
+    //                 break;
+    //         }
+    //     });
     
-    });
+    // });
 
     function toggleSelectedItem(item) {
         // Remove 'action' class from all items
@@ -8191,7 +8324,7 @@ function getCookie(name) {
             let money = $(this).attr('data-money');
             $('.pay-box .list .li').removeClass('action');
             $(this).addClass('action');
-            $('input').val(money);
+            $('#amountInput').val(money);
         });
         function formateT(params) {
             let result = (params < 10) ? "0" + params : params;
@@ -8214,90 +8347,7 @@ function getCookie(name) {
             let seconds = formateT(date.getSeconds());
             return days + '/' + months + '/' + years;
         }
-        let storedData = JSON.parse(localStorage.getItem('userData'));
-        $.ajax({
-            type: "POST",
-            url: "/api/webapi/recharge/check",
-            data: {
-                payment_url: storedData,
-                checlk: "idCheclk",
-            },
-            dataType: "json",
-            success: function (response) {
-                $('.Loading').fadeOut(50);
-                let data = response.datas;
-                let infoBank = response.infoBank;
-                if (!data) return;
-
-                $('.selectBox .pay-box:eq(1)').fadeIn(0);
-                $('.selectBox .pay-box:eq(2)').fadeOut(0);
-
-                if (data.type === 'upi') {
-                    window.location.href = String(storedData);
-                }
-                $(document).ready(function () {
-                    $('.selectBox .pay-box:eq(0)').hide();
-                    $('.selectBox .pay-box:eq(1)').hide();
-                    const dataType = response.datas.type;
-                    if (dataType === 'upi' || dataType === 'bank') {
-                        $('.list .item[type="upi"]').addClass('action');
-                        $('.selectBox .pay-box:eq(1)').fadeIn(0);
-                    }
-                    $('.list .item').on('click', function () {
-                        const type = $(this).attr('type');
-                        $('.list .item').removeClass('action');
-                        $(this).addClass('action');
-                        if (type === 'upi') {
-                            $('.selectBox .pay-box:eq(0)').hide();
-                            $('.selectBox .pay-box:eq(1)').fadeIn(0);
-                        } else if (type === 'bank') {
-                            $('.selectBox .pay-box:eq(0)').fadeIn(0);
-                            $('.selectBox .pay-box:eq(1)').hide();
-                        }
-                    });
-                });
-
-                $('.time').text('30:00');
-                $('#submitButton').on('click', function () {
-                    const inputData = $('#inputField').val();
-                    $.ajax({
-                        type: 'POST',
-                        url: '/api/webapi/recharge/update',
-                        data: {
-                            id_order: data.id_order,
-                            inputData: inputData,
-                        },
-                        dataType: 'json',
-                        success: function (response) {
-                            alertMess(response.message);
-                            setTimeout(() => {
-                            if (response.status == true) {
-                            window.location.href = "https://91lottery.asia/wallet/rechargerecord";
-                        }
-                        }, 1200);
-
-                        },
-                        error: function (error) {
-                            alertMess(error);
-                            console.error('Update Error', error);
-                        },
-                    });
-                });
-
-                // const itemElements = document.querySelectorAll(".item.action");
-
-                // // Add click event listeners to each element
-                // itemElements.forEach((element) => {
-                //     element.addEventListener("click", () => {
-                //         // Get the value of the "type" attribute of the clicked element
-                //         const dataType = element.getAttribute("type");
-
-                //         // Log the data type to the console
-                //         console.log("data.type", dataType);
-                //     });
-                // });
-            }
-        });
+       
 
         $('#href-bank').click(function (e) {
             e.preventDefault();
@@ -8314,12 +8364,23 @@ function getCookie(name) {
                             </div>`);
         });
 
+        $('#create-bank2').click(function (e) {
+            e.preventDefault();
+            $('.reacharge-popup').addClass('actie');
+            return false;
+        });
+        $('.cancel').click(function(){
+            $('.reacharge-popup').removeClass('actie');
+            return false;
+        });
+
         $('#create-bank').click(function (e) {
             e.preventDefault();
             $(this).addClass('block-click');
 
             let money = $('#amountInput').val().trim();
             let typeElement = $('.pay-box:eq(0) .list').find('.action');
+            let ut = $('.utr').val();
 
             if (!typeElement.length) {
                 alertMess('Please select a payment method', $(this));
@@ -8335,6 +8396,7 @@ function getCookie(name) {
                     data: {
                         money: money,
                         type: type,
+                        utr:ut,
                     },
                     dataType: "json",
                     success: function (response) {
@@ -8344,7 +8406,7 @@ function getCookie(name) {
                         $('.Loading').fadeIn(0);
                         setTimeout(() => {
                             $('.Loading').fadeOut(0);
-                            location.reload();
+                            location.href = "https://www.69lottery.online/wallet/rechargerecord";
                             // setTimeout(() => {
                             //     location.href = data.url;
                             // }, 100);
