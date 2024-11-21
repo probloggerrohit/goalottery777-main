@@ -700,6 +700,7 @@ const recharge = async (req, res) => {
     let money = req.body.money;
     let type = req.body.type;
     let typeid = req.body.typeid;
+    let utr = req.body.utr;
 
     const minimumMoney = process.env.MINIMUM_MONEY
 
@@ -786,8 +787,9 @@ const recharge = async (req, res) => {
             status = ?,
             today = ?,
             url = ?,
+            utr = ?,
             time = ?`;
-            await connection.execute(sql, [client_transaction_id, 'NULL', userInfo.phone, money, type, 0, checkTime, 'NULL', time]);
+            await connection.execute(sql, [client_transaction_id, 'NULL', userInfo.phone, money, type, 0, checkTime, 'NULL', utr, time]);
             const [recharge] = await connection.query('SELECT * FROM recharge WHERE phone = ? AND status = ? ', [userInfo.phone, 0]);
             return res.status(200).json({
                 message: 'Received successfully',
