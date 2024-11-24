@@ -707,7 +707,7 @@ const settingBank = async (req, res) => {
             ])
 
             return res.status(200).json({
-                message: 'Successfully changed sssss',
+                message: 'Successfully changed',
                 status: true,
                 datas: recharge,
             });
