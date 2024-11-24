@@ -90,8 +90,6 @@
                                         id="edit-momo-name" value=""><br>
                                     <input type="text" class="form-control" placeholder="UPI ID" id="edit-momo-info"
                                         value=""><br>
-                                    <input type="file" class="form-control" placeholder="UPI Image" id="edit-momo-info-img"
-                                        value=""><br>
                                     <input type="text" class="form-control" placeholder="USDT Wallet Address"
                                         id="edit-momo-qr" value=""><br>
                                     <button type="submit" class="btn btn-primary edit-momo"
@@ -252,6 +250,7 @@
                 const upi_id = $('#edit-momo-info').val();
                 const usdt_wallet_address = $('#edit-momo-qr').val();
 
+                /*
                 const formData = new FormData();
             
                 // Add text fields
@@ -274,15 +273,15 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+                */
 
-                // const response = await axios.post("/admin/manager/settings/bank", {
-                //     bank_name,
-                //     username,
-                //     upi_id,
-                //     usdt_wallet_address,
-                //     typer: 'momo',
-                //     upi_id_qr
-                // })
+                const response = await axios.post("/admin/manager/settings/bank", {
+                    bank_name,
+                    username,
+                    upi_id,
+                    usdt_wallet_address,
+                    typer: 'momo'
+                })
 
                 if (response?.data?.status === true) {
                     alertMessage(response?.data?.message)
