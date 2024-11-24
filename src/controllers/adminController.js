@@ -662,7 +662,7 @@ const handlWithdraw = async (req, res) => {
 const settingBank = async (req, res) => {
     try {
 
-        console.log(req.body);
+
         let auth = req.cookies.auth;
         let name_bank = req.body.name_bank;
         let name = req.body.name;
