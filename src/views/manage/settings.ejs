@@ -250,6 +250,7 @@
                 const bank_name = $('#edit-momo-name_bank').val();
                 const username = $('#edit-momo-name').val();
                 const upi_id = $('#edit-momo-info').val();
+                const upi_id_qr = $('#edit-momo-info-img').val();
                 const usdt_wallet_address = $('#edit-momo-qr').val();
 
                 const response = await axios.post("/admin/manager/settings/bank", {
@@ -257,7 +258,8 @@
                     username,
                     upi_id,
                     usdt_wallet_address,
-                    typer: 'momo'
+                    typer: 'momo',
+                    upi_id_qr
                 })
 
                 if (response?.data?.status === true) {
