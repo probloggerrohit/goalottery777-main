@@ -696,7 +696,7 @@ const settingBank = async (req, res) => {
             await Promise.all(deleteRechargeQueries)
 
             // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
-
+            console.log(req.body);
             const bankName = req.body.bank_name
             const username = req.body.username
             const upiId = req.body.upi_id
