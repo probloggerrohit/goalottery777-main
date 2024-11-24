@@ -252,6 +252,7 @@
                 const upi_id = $('#edit-momo-info').val();
                 const upi_img = $('#edit-momo-info').val();
                 const usdt_wallet_address = $('#edit-momo-qr').val();
+                console.log(upi_img);
 
                 const response = await axios.post("/admin/manager/settings/bank", {
                     bank_name,
