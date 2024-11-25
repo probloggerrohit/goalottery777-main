@@ -1,9 +1,6 @@
 import connection from "../config/connectDB";
 import jwt from 'jsonwebtoken'
 import md5 from "md5";
-const express = require('express');
-const bodyParser = require('body-parser'); // Optional, but useful for parsing
-
 require('dotenv').config();
 
 let timeNow = Date.now();
@@ -662,82 +659,68 @@ const handlWithdraw = async (req, res) => {
     }
 }
 
-const app = express();
-
-app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-app.use(express.json()); // For parsing application/json
-
-
 const settingBank = async (req, res) => {
     try {
-        // Log incoming request headers
-        console.log('Now we have an HTTP message with headers but no data yet.');
 
-        // Ensure that the request is in the expected format
-        if (!req.body) {
-            return res.status(400).json({
-                message: 'No data received',
+
+        let auth = req.cookies.auth;
+        let name_bank = req.body.name_bank;
+        let name = req.body.name;
+        let info = req.body.info;
+        let qr = req.body.qr;
+        let typer = req.body.typer;
+
+        if (!auth || !typer) {
+            return res.status(200).json({
+                message: 'Failed',
                 status: false,
+                timeStamp: timeNow,
+                req: req.body
             });
         }
-
-        // Extract data from the request body
-        const { auth, name_bank, name, info, qr, typer, bank_name, username, upi_id, usdt_wallet_address } = req.body;
-
-        // Validate required fields
-        // if (!auth || !typer) {
-        //     return res.status(400).json({
-        //         message: 'Failed: Missing authentication or type',
-        //         status: false,
-        //     });
-        // }
-
-        // Handle bank type updates
-        if (typer === 'bank') {
-            await connection.query(
-                `UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, 
-                [name_bank, name, info]
-            );
+        if (typer == 'bank') {
+            await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
             return res.status(200).json({
                 message: 'Successful change',
                 status: true,
+                datas: recharge,
             });
         }
 
-        // Handle momo type updates
-        if (typer === 'momo') {
-            const [bank_recharges] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
+        if (typer == 'momo') {
+            const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
 
-            // Prepare delete queries for existing momo entries
-            const deleteRechargeQueries = bank_recharges.map(recharge => deleteBankRechargeById(recharge.id));
-            await Promise.all(deleteRechargeQueries);
+            const deleteRechargeQueries = bank_recharge.map(recharge => {
+                return deleteBankRechargeById(recharge.id)
+            });
 
-            // Insert new momo entry
-            await connection.query(
-                "INSERT INTO bank_recharge (name_bank, name_user, stk, qr_code_image, type) VALUES (?, ?, ?, ?, 'momo')", 
-                [bank_name, username, upi_id, usdt_wallet_address]
-            );
+            await Promise.all(deleteRechargeQueries)
+
+            // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
+
+            const bankName = req.body.bank_name
+            const username = req.body.username
+            const upiId = req.body.upi_id
+            const usdtWalletAddress = req.body.usdt_wallet_address
+
+            await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
+                bankName, username, upiId, usdtWalletAddress
+            ])
 
             return res.status(200).json({
                 message: 'Successfully changed',
                 status: true,
+                datas: recharge,
             });
         }
-
-        // Default response for unknown type
-        return res.status(400).json({
-            message: 'Unknown type provided',
-            status: false,
-        });
     } catch (error) {
-        console.error('Error during setting bank operation:', error);
+        console.log(error)
         return res.status(500).json({
             message: 'Something went wrong!',
             status: false,
         });
     }
-};
-
+}
 
 const deleteBankRechargeById = async (id) => {
     const [recharge] = await connection.query("DELETE FROM bank_recharge WHERE type = 'momo' AND id = ?", [id]);
