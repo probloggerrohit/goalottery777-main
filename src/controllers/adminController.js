@@ -675,7 +675,7 @@ const settingBank = async (req, res) => {
                 message: 'Failed',
                 status: false,
                 timeStamp: timeNow,
-                req: req
+                req: req.body
             });
         }
         if (typer == 'bank') {
