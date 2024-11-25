@@ -658,62 +658,41 @@ const handlWithdraw = async (req, res) => {
         });
     }
 }
-const settingBank = async (req, res) => {
+
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const app = express();
+
+// Set up multer for file storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');  // Folder where files will be stored
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));  // Unique file name
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Route to handle form data and file upload
+app.post('/admin/manager/settings/bank', upload.single('qr_image'), async (req, res) => {
     try {
-        // Handle file upload via multer
-        const file = req.file;  // This will be populated by multer if a file is uploaded
+        const { bank_name, username, upi_id, usdt_wallet_address, typer } = req.body;
+        const qr_image = req.file;  // The uploaded file
 
-        let auth = req.cookies.auth;
-        let name_bank = req.body.name_bank;
-        let name = req.body.name;
-        let info = req.body.info;
-        let qr = req.body.qr;
-        let typer = req.body.typer;
+        // Log to check if the file is being received
+        console.log('Received form data:', req.body);
+        console.log('Received file:', qr_image);
 
-        if (!auth || !typer) {
-            return res.status(200).json({
-                message: 'Failed',
-                status: false,
-                timeStamp: Date.now(),
-                req: req.body
-            });
-        }
-
-        // If 'bank' type, update the bank_recharge table without file
-        if (typer === 'bank') {
-            await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
-            return res.status(200).json({
-                message: 'Successful change',
-                status: true,
-            });
-        }
-
-        // If 'momo' type, handle the file and other fields
+        // Handle the data (e.g., save to DB)
         if (typer === 'momo') {
-            // If file is uploaded, save the path of the file
-            let qrCodeImagePath = null;
-            if (file) {
-                qrCodeImagePath = file.path;  // Save the file path to the database
-            }
-
-            // Process the database logic
-            const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
-
-            // Delete old 'momo' records from the bank_recharge table
-            const deleteRechargeQueries = bank_recharge.map(recharge => {
-                return deleteBankRechargeById(recharge.id);
-            });
-
-            await Promise.all(deleteRechargeQueries);
-
-            // Insert the new data into the bank_recharge table, including the file path
-            const bankName = req.body.bank_name;
-            const username = req.body.username;
-            const upiId = req.body.upi_id;
-            const usdtWalletAddress = req.body.usdt_wallet_address;
-
+            const qrCodeImagePath = qr_image ? qr_image.path : null;  // If a file is uploaded, save its path
+            
+            // Example of inserting data into the database
             await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
-                bankName, username, upiId, usdtWalletAddress, qrCodeImagePath
+                bank_name, username, upi_id, usdt_wallet_address, qrCodeImagePath
             ]);
 
             return res.status(200).json({
@@ -721,14 +700,18 @@ const settingBank = async (req, res) => {
                 status: true,
             });
         }
+
+        // Handle other types (if needed)
+
     } catch (error) {
-        console.log(error);
+        console.error('Error during file upload or data handling:', error);
         return res.status(500).json({
             message: 'Something went wrong!',
             status: false,
         });
     }
-};
+});
+
 
 // const settingBank = async (req, res) => {
 //     try {
