@@ -658,10 +658,10 @@ const handlWithdraw = async (req, res) => {
         });
     }
 }
-
 const settingBank = async (req, res) => {
     try {
-
+        // Handle file upload via multer
+        const file = req.file;  // This will be populated by multer if a file is uploaded
 
         let auth = req.cookies.auth;
         let name_bank = req.body.name_bank;
@@ -674,53 +674,124 @@ const settingBank = async (req, res) => {
             return res.status(200).json({
                 message: 'Failed',
                 status: false,
-                timeStamp: timeNow,
+                timeStamp: Date.now(),
                 req: req.body
             });
         }
-        if (typer == 'bank') {
+
+        // If 'bank' type, update the bank_recharge table without file
+        if (typer === 'bank') {
             await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
             return res.status(200).json({
                 message: 'Successful change',
                 status: true,
-                datas: recharge,
             });
         }
 
-        if (typer == 'momo') {
+        // If 'momo' type, handle the file and other fields
+        if (typer === 'momo') {
+            // If file is uploaded, save the path of the file
+            let qrCodeImagePath = null;
+            if (file) {
+                qrCodeImagePath = file.path;  // Save the file path to the database
+            }
+
+            // Process the database logic
             const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
 
+            // Delete old 'momo' records from the bank_recharge table
             const deleteRechargeQueries = bank_recharge.map(recharge => {
-                return deleteBankRechargeById(recharge.id)
+                return deleteBankRechargeById(recharge.id);
             });
 
-            await Promise.all(deleteRechargeQueries)
+            await Promise.all(deleteRechargeQueries);
 
-            // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
-
-            const bankName = req.body.bank_name
-            const username = req.body.username
-            const upiId = req.body.upi_id
-            const usdtWalletAddress = req.body.usdt_wallet_address
+            // Insert the new data into the bank_recharge table, including the file path
+            const bankName = req.body.bank_name;
+            const username = req.body.username;
+            const upiId = req.body.upi_id;
+            const usdtWalletAddress = req.body.usdt_wallet_address;
 
             await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
-                bankName, username, upiId, usdtWalletAddress
-            ])
+                bankName, username, upiId, usdtWalletAddress, qrCodeImagePath
+            ]);
 
             return res.status(200).json({
                 message: 'Successfully changed',
                 status: true,
-                datas: recharge,
             });
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({
             message: 'Something went wrong!',
             status: false,
         });
     }
-}
+};
+
+// const settingBank = async (req, res) => {
+//     try {
+
+
+//         let auth = req.cookies.auth;
+//         let name_bank = req.body.name_bank;
+//         let name = req.body.name;
+//         let info = req.body.info;
+//         let qr = req.body.qr;
+//         let typer = req.body.typer;
+
+//         if (!auth || !typer) {
+//             return res.status(200).json({
+//                 message: 'Failed',
+//                 status: false,
+//                 timeStamp: timeNow,
+//                 req: req.body
+//             });
+//         }
+//         if (typer == 'bank') {
+//             await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
+//             return res.status(200).json({
+//                 message: 'Successful change',
+//                 status: true,
+//                 datas: recharge,
+//             });
+//         }
+
+//         if (typer == 'momo') {
+//             const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
+
+//             const deleteRechargeQueries = bank_recharge.map(recharge => {
+//                 return deleteBankRechargeById(recharge.id)
+//             });
+
+//             await Promise.all(deleteRechargeQueries)
+
+//             // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
+
+//             const bankName = req.body.bank_name
+//             const username = req.body.username
+//             const upiId = req.body.upi_id
+//             const usdtWalletAddress = req.body.usdt_wallet_address
+
+//             await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
+//                 bankName, username, upiId, usdtWalletAddress
+//             ])
+
+//             return res.status(200).json({
+//                 message: 'Successfully changed',
+//                 status: true,
+//                 datas: recharge,
+//             });
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         return res.status(500).json({
+//             message: 'Something went wrong!',
+//             status: false,
+//         });
+//     }
+// }
 
 const deleteBankRechargeById = async (id) => {
     const [recharge] = await connection.query("DELETE FROM bank_recharge WHERE type = 'momo' AND id = ?", [id]);
