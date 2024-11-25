@@ -275,7 +275,7 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                */
+               
                 const formData = new FormData();
         
                 // Add text fields
@@ -296,14 +296,14 @@
                     }
                 });
 
-                /*
+                */
                 const response = await axios.post("/admin/manager/settings/bank", {
                     bank_name,
                     username,
                     upi_id,
                     usdt_wallet_address,
                     typer: 'momo'
-                }) */
+                }) 
 
                 if (response?.data?.status === true) {
                     alertMessage(response?.data?.message)
