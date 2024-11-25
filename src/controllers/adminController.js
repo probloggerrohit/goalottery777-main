@@ -660,6 +660,14 @@ const handlWithdraw = async (req, res) => {
 }
 
 const settingBank = async (req, res) => {
+    console.log('Now we have a http message with headers but no data yet.');
+    req.on('data', chunk => {
+      console.log('A chunk of data has arrived: ', chunk);
+    });
+    req.on('end', () => {
+      console.log('No more data');
+    })
+    /*
     try {
 
 
@@ -719,7 +727,7 @@ const settingBank = async (req, res) => {
             message: 'Something went wrong!',
             status: false,
         });
-    }
+    } */
 }
 
 const deleteBankRechargeById = async (id) => {
