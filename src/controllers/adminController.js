@@ -685,12 +685,12 @@ const settingBank = async (req, res) => {
         const { auth, name_bank, name, info, qr, typer, bank_name, username, upi_id, usdt_wallet_address } = req.body;
 
         // Validate required fields
-        if (!auth || !typer) {
-            return res.status(400).json({
-                message: 'Failed: Missing authentication or type',
-                status: false,
-            });
-        }
+        // if (!auth || !typer) {
+        //     return res.status(400).json({
+        //         message: 'Failed: Missing authentication or type',
+        //         status: false,
+        //     });
+        // }
 
         // Handle bank type updates
         if (typer === 'bank') {
