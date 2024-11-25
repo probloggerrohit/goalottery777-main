@@ -660,66 +660,68 @@ const handlWithdraw = async (req, res) => {
 }
 
 const settingBank = async (req, res) => {
-    try {
+
+    console.log('heelo');
+    // try {
 
 
-        let auth = req.cookies.auth;
-        let name_bank = req.body.name_bank;
-        let name = req.body.name;
-        let info = req.body.info;
-        let qr = req.body.qr;
-        let typer = req.body.typer;
+    //     let auth = req.cookies.auth;
+    //     let name_bank = req.body.name_bank;
+    //     let name = req.body.name;
+    //     let info = req.body.info;
+    //     let qr = req.body.qr;
+    //     let typer = req.body.typer;
 
-        if (!auth || !typer) {
-            return res.status(200).json({
-                message: 'Failed',
-                status: false,
-                timeStamp: timeNow,
-                req: req
-            });
-        }
-        if (typer == 'bank') {
-            await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
-            return res.status(200).json({
-                message: 'Successful change',
-                status: true,
-                datas: recharge,
-            });
-        }
+    //     if (!auth || !typer) {
+    //         return res.status(200).json({
+    //             message: 'Failed',
+    //             status: false,
+    //             timeStamp: timeNow,
+    //             req: req
+    //         });
+    //     }
+    //     if (typer == 'bank') {
+    //         await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ? WHERE type = 'bank'`, [name_bank, name, info]);
+    //         return res.status(200).json({
+    //             message: 'Successful change',
+    //             status: true,
+    //             datas: recharge,
+    //         });
+    //     }
 
-        if (typer == 'momo') {
-            const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
+    //     if (typer == 'momo') {
+    //         const [bank_recharge] = await connection.query(`SELECT * FROM bank_recharge WHERE type = 'momo'`);
 
-            const deleteRechargeQueries = bank_recharge.map(recharge => {
-                return deleteBankRechargeById(recharge.id)
-            });
+    //         const deleteRechargeQueries = bank_recharge.map(recharge => {
+    //             return deleteBankRechargeById(recharge.id)
+    //         });
 
-            await Promise.all(deleteRechargeQueries)
+    //         await Promise.all(deleteRechargeQueries)
 
-            // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
+    //         // await connection.query(`UPDATE bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ? WHERE type = 'upi'`, [name_bank, name, info, qr]);
 
-            const bankName = req.body.bank_name
-            const username = req.body.username
-            const upiId = req.body.upi_id
-            const usdtWalletAddress = req.body.usdt_wallet_address
+    //         const bankName = req.body.bank_name
+    //         const username = req.body.username
+    //         const upiId = req.body.upi_id
+    //         const usdtWalletAddress = req.body.usdt_wallet_address
 
-            await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
-                bankName, username, upiId, usdtWalletAddress
-            ])
+    //         await connection.query("INSERT INTO bank_recharge SET name_bank = ?, name_user = ?, stk = ?, qr_code_image = ?, type = 'momo'", [
+    //             bankName, username, upiId, usdtWalletAddress
+    //         ])
 
-            return res.status(200).json({
-                message: 'Successfully changed',
-                status: true,
-                datas: recharge,
-            });
-        }
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            message: 'Something went wrong!',
-            status: false,
-        });
-    }
+    //         return res.status(200).json({
+    //             message: 'Successfully changed',
+    //             status: true,
+    //             datas: recharge,
+    //         });
+    //     }
+    // } catch (error) {
+    //     console.log(error)
+    //     return res.status(500).json({
+    //         message: 'Something went wrong!',
+    //         status: false,
+    //     });
+    // }
 }
 
 const deleteBankRechargeById = async (id) => {
