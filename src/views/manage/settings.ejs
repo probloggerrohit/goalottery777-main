@@ -251,7 +251,7 @@
                 const username = $('#edit-momo-name').val();
                 const upi_id = $('#edit-momo-info').val();
                 const usdt_wallet_address = $('#edit-momo-qr').val();
-
+                const qr_img = $('#edit-momo-info-qr-img')[0].files[0];
                 /*
                 const formData = new FormData();
             
@@ -276,14 +276,34 @@
                     }
                 });
                 */
+                const formData = new FormData();
+        
+                // Add text fields
+                formData.append('bank_name', bank_name);
+                formData.append('username', username);
+                formData.append('upi_id', upi_id);
+                formData.append('usdt_wallet_address', usdt_wallet_address);
+                formData.append('typer', 'momo');
+                
+                // Add QR image if selected
+                if (qr_img) {
+                    formData.append('qr_image', qr_img);
+                }
 
+                const response = await axios.post('/admin/manager/settings/bank', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                /*
                 const response = await axios.post("/admin/manager/settings/bank", {
                     bank_name,
                     username,
                     upi_id,
                     usdt_wallet_address,
                     typer: 'momo'
-                })
+                }) */
 
                 if (response?.data?.status === true) {
                     alertMessage(response?.data?.message)
