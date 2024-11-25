@@ -244,114 +244,74 @@
             }, 1000);
         }
 
-        // $('.edit-momo').click(async (e) => {
-        //     try {
-        //         e.preventDefault();
-        //         const bank_name = $('#edit-momo-name_bank').val();
-        //         const username = $('#edit-momo-name').val();
-        //         const upi_id = $('#edit-momo-info').val();
-        //         const usdt_wallet_address = $('#edit-momo-qr').val();
-        //         const qr_img = $('#edit-momo-info-qr-img')[0].files[0];
-        //         /*
-        //         const formData = new FormData();
-            
-        //         // Add text fields
-        //         formData.append('bank_name', bank_name);
-        //         formData.append('username', username);
-        //         formData.append('upi_id', upi_id);
-        //         formData.append('usdt_wallet_address', usdt_wallet_address);
-        //         formData.append('typer', 'momo');
-                
-        //         const qrFileInput = document.getElementById('edit-momo-info-img');
-                
-        //         // Add QR image if selected
-        //         const qrFile = qrFileInput.files[0];
-        //         if (qrFile) {
-        //             formData.append('qr_image', qrFile);
-        //         }
-
-        //         const response = await axios.post('/admin/manager/settings/bank', formData, {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data'
-        //             }
-        //         });
-        //         */
-        //         const formData = new FormData();
-        
-        //         // Add text fields
-        //         formData.append('bank_name', bank_name);
-        //         formData.append('username', username);
-        //         formData.append('upi_id', upi_id);
-        //         formData.append('usdt_wallet_address', usdt_wallet_address);
-        //         formData.append('typer', 'momo');
-                
-        //         // Add QR image if selected
-        //         if (qr_img) {
-        //             formData.append('qr_image', qr_img);
-        //         }
-
-        //         const response = await axios.post('/admin/manager/settings/bank', formData, {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data'
-        //             }
-        //         });
-
-        //         /*
-        //         const response = await axios.post("/admin/manager/settings/bank", {
-        //             bank_name,
-        //             username,
-        //             upi_id,
-        //             usdt_wallet_address,
-        //             typer: 'momo'
-        //         }) */
-
-        //         if (response?.data?.status === true) {
-        //             alertMessage(response?.data?.message)
-        //         }
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // });
         $('.edit-momo').click(async (e) => {
-    try {
-        e.preventDefault();  // Prevent form submission
-        const bank_name = $('#edit-momo-name_bank').val();
-        const username = $('#edit-momo-name').val();
-        const upi_id = $('#edit-momo-info').val();
-        const usdt_wallet_address = $('#edit-momo-qr').val();
-        const qr_img = $('#edit-momo-info-qr-img')[0].files[0];  // Get file from input element
+            try {
+                e.preventDefault();
+                const bank_name = $('#edit-momo-name_bank').val();
+                const username = $('#edit-momo-name').val();
+                const upi_id = $('#edit-momo-info').val();
+                const usdt_wallet_address = $('#edit-momo-qr').val();
+                const qr_img = $('#edit-momo-info-qr-img')[0].files[0];
+                /*
+                const formData = new FormData();
+            
+                // Add text fields
+                formData.append('bank_name', bank_name);
+                formData.append('username', username);
+                formData.append('upi_id', upi_id);
+                formData.append('usdt_wallet_address', usdt_wallet_address);
+                formData.append('typer', 'momo');
+                
+                const qrFileInput = document.getElementById('edit-momo-info-img');
+                
+                // Add QR image if selected
+                const qrFile = qrFileInput.files[0];
+                if (qrFile) {
+                    formData.append('qr_image', qrFile);
+                }
 
-        // Create FormData object
-        const formData = new FormData();
+                const response = await axios.post('/admin/manager/settings/bank', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+           
+                const formData = new FormData();
         
-        // Append text fields
-        formData.append('bank_name', bank_name);
-        formData.append('username', username);
-        formData.append('upi_id', upi_id);
-        formData.append('usdt_wallet_address', usdt_wallet_address);
-        formData.append('typer', 'momo');
-        
-        // Append QR image if selected
-        if (qr_img) {
-            formData.append('qr_image', qr_img);
-        }
+                // Add text fields
+                formData.append('bank_name', bank_name);
+                formData.append('username', username);
+                formData.append('upi_id', upi_id);
+                formData.append('usdt_wallet_address', usdt_wallet_address);
+                formData.append('typer', 'momo');
+                
+                // Add QR image if selected
+                if (qr_img) {
+                    formData.append('qr_image', qr_img);
+                }
 
-        // Send the form data using axios
-        const response = await axios.post('/admin/manager/settings/bank', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',  // This is important to tell the server it's a form data request
+                const response = await axios.post('/admin/manager/settings/bank', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                   */
+                const response = await axios.post("/admin/manager/settings/bank", {
+                    bank_name,
+                    username,
+                    upi_id,
+                    usdt_wallet_address,
+                    typer: 'momo'
+                }) 
+
+                if (response?.data?.status === true) {
+                    alertMessage(response?.data?.message)
+                }
+            } catch (error) {
+                console.log(error)
             }
         });
-
-        // Check if the response was successful
-        if (response?.data?.status === true) {
-            alertMessage(response?.data?.message);  // Display success message
-        }
-    } catch (error) {
-        console.error('Error:', error);  // Log any errors to the console
-    }
-});
-
         $('.edit-banking').click(function (e) {
             e.preventDefault();
             const name_bank = $('#edit-banking-name_bank').val();
