@@ -660,6 +660,7 @@ const handlWithdraw = async (req, res) => {
 }
 
 const settingBank = async (req, res) => {
+    console.log(req);
 
     console.log('heelo');
     // try {
