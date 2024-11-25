@@ -660,7 +660,6 @@ const handlWithdraw = async (req, res) => {
 }
 
 const settingBank = async (req, res) => {
-    console.log(req);
     try {
 
 
@@ -676,6 +675,7 @@ const settingBank = async (req, res) => {
                 message: 'Failed',
                 status: false,
                 timeStamp: timeNow,
+                req: req
             });
         }
         if (typer == 'bank') {
