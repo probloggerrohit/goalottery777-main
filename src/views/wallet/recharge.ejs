@@ -8018,10 +8018,12 @@
             <div class="reacharge-popup">
                 <div class="popup-inn">
                   <h2>One Qr code for single payment only</h2>
-                    <div class="qr-image">
-                        <img src="https://i.postimg.cc/B6CP8M7N/qrr.jpg"/>            </div>
+                    <div class="qr-image" id="qrCodeContainer"> 
+                        <!-- QR code will be generated here -->
+                    </div>
+                    <!-- <div class="qr-image">
+                        <img src="https://i.postimg.cc/B6CP8M7N/qrr.jpg"/>            </div> -->
                     <div class="qr-data">
-                        <h4> UPI ID : <%= bank_recharge_momo.stk %></h4>
                         <p>Pay on the above qr code and paste the UTR number from transaction below.</p>
                         <div class="form-group">
                             <input type="number" class="utr form-control" placeholder="Enter type number">
@@ -8034,6 +8036,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-qrcode/1.0/jquery.qrcode.min.js"></script>
     <script src="/js/client.js"></script>
     
     <script>
@@ -8447,6 +8450,35 @@ function getCookie(name) {
                     clearInterval(countdownInterval);
                 }
             }, 1000); 
+
+            function generateUpiQrCode(upiId) {
+                // Validate UPI ID
+                if (!upiId) {
+                    console.error("UPI ID is not provided.");
+                    return;
+                }
+
+                // Construct the UPI URI for payment
+                const merchantName = '69Lottery';
+                const merchantCode = '69Lottery'; // Replace with your actual merchant code
+                const currency = 'INR';
+                const url = encodeURIComponent('https://www.69lottery.online/wallet/recharge');
+
+                const qrData = `upi://pay?pa=${upiId}&pn=${merchantName}&mc=${merchantCode}&cu=${currency}&url=${url}`;
+
+                // Clear previous QR code
+                $('#qrCodeContainer').empty();
+
+                // Generate new QR code
+                $('#qrCodeContainer').qrcode({
+                    text: qrData,
+                    width: 300,
+                    height: 300
+                });
+            }
+
+            var upiId = '<%= bank_recharge_momo.stk %>';
+            generateUpiQrCode(upiId);
         });
 
     </script>
