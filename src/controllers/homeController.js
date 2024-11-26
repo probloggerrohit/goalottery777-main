@@ -52,8 +52,11 @@ const walletPage = async (req, res) => {
 }
 
 const rechargePage = async (req, res) => {
+    const [bank_recharge_momo] = await connection.query("SELECT * FROM bank_recharge WHERE type = 'momo'");
+    const bank_recharge_momo_data = bank_recharge_momo[0];
     return res.render("wallet/recharge.ejs", {
-        MinimumMoney: process.env.MINIMUM_MONEY
+        MinimumMoney: process.env.MINIMUM_MONEY,
+        bank_recharge_momo: bank_recharge_momo_data,
     });
 }
 
